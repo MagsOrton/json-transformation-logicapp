@@ -1,4 +1,4 @@
-# Hands-On-Labs - Basic Enterprise Integration with Logic Apps. Json transformation with Parameters
+# Hands-On-Labs - Basic Enterprise Integration with Logic Apps. JSON transformation with Parameters
 This hands-on lab implements a part of the scenario based on the content described here - [Basic enterprise integration on Azure](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/enterprise-integration/basic-enterprise-integration)
 
 ![alt](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/enterprise-integration/_images/simple-enterprise-integration.png)
@@ -7,7 +7,7 @@ The scenario above was modified implementing a more complex JSON payload transfo
 
 ![](docs/media/2021-12-20-18-39-32.png)
 
-# Scenario overview. Contoso Books, Ltd
+## Scenario overview. Contoso Books, Ltd
 
 Contoso Books, Ltd. is a small but growing company that offers digital purchases of books. They attract new customers through their aggressive and creative advertising strategy and by providing an inventory that is comparable to what the larger online book stores offer.
 
