@@ -5,7 +5,7 @@ This hands-on lab implements a part of the scenario based on the content describ
 
 The scenario above was modified implementing a more complex JSON payload transformation inside of the Logic App instead of doing that in the API Management (APIM) - see green arrows. The complexity is increased by having some parameters needed by the JSON transformation: 
 
-![](docs\media\2021-12-20-18-39-32.png)
+![see](docs\media\2021-12-20-18-39-32.png)
 
 # Scenario overview. Contoso Books, Ltd
 
