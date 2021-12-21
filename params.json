@@ -1,0 +1,22 @@
+{
+    "StoreA" :
+    {
+        "serviceEndpoint" : "https://order-engine.storea.com",
+        "OAuthTenantName" : "storea.com",
+        "OAuthAppId" : "2de6a36b-89f0-4ef3-a8ce-191402ed2a1a",
+        "OAuthAppSecret" : "storeAbigSecret",
+        "retryAttempts" : 3,
+        "retryInterval" : 5,
+        "logLevel" : "info"
+    },
+    "StoreB" :
+    {
+        "serviceEndpoint" : "https://order-engine.storeb.com",
+        "OAuthTenantName" : "storeb.com",
+        "OAuthAppId" : "61612ba2-5672-4aa2-bfec-18886177871e",
+        "OAuthAppSecret" : "storeBbigSecret",
+        "retryAttempts" : 5,
+        "retryInterval" : 2,
+        "logLevel" : "error"
+    }
+}

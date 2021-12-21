@@ -9,11 +9,20 @@ The scenario above was modified implementing a more complex JSON payload transfo
 
 ## Scenario overview. Contoso Books, Ltd
 
-Contoso Books, Ltd. is a small but growing company that offers digital purchases of books. They attract new customers through their aggressive and creative advertising strategy and by providing an inventory that is comparable to what the larger online book stores offer.
+Contoso Books, Ltd. is a small but growing company that offers digital purchases of books. They decided to attract new customers through their aggressive and creative advertising strategy and by providing an inventory that is comparable to what the larger online book stores offer. 
 
-Contoso Books has recently completed an online book ordering deal with a number of local book selling companies, which promises to expand both their book catalog and customer base. The book ordering process from Contoso Books e-Commerce site needs to be extended for ordering books from the local stores. 
-
-Since each local book store implements their own order HTTP-REST-API, Contoso Books e-Commerce REST-API needs to integrate with the new partners. The integration will transform JSON payload from APIM, add some configuration data for the individual local store parameters and call these services.
+They created a new cloud based highly scalable e-commerce portal with the e-Commerce Order (ECO) API exposed to it, and need to integrate ECO API with the existing on-premise order processing system MyBookOrder (MBO) API. The integration is done by JSON transformation using some additional configuration parameters needed by MBO API. 
 
 Since Contoso Books team is consisting of IT professionals and not software engineers, they decided to use Azure Logic Apps for the integration purposes.
+
+Secrets need to be stored in Azure KeyVault
+
+### Contoso Books sample payloads:
+
+[ECO Payload](eco-payload.json)
+
+[MBO Parameters](params.json)
+
+[MBO Payload](params.json)
+
 
