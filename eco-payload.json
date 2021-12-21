@@ -1,0 +1,46 @@
+[
+    {
+        "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
+        "orderDate": "2021-03-19T07:22Z",
+        "deliveryAddress": {
+            "firstName": "Bob",
+            "lastName": "Mustermann",
+            "city": "Budapest",
+            "country": "Hungary",
+            "postalCode": "1073",
+            "streetAddress": "Liszt Ferenc tér 5"
+        },
+        "orderItems": [
+            {
+                "ISBN": "9783060311354",
+                "title": "Fahrenheit 451",
+                "author": "Ray Bradbury",
+                "category": "sci-fi",
+                "price": 11.99,
+                "quantity": 1,
+                "bookStore": "StoreA",
+                "bookStoreBranch": "Budapest"        
+            },
+            {
+                "ISBN": "9780571258093",
+                "title": "Never let me go",
+                "author": "Kazuro Ishiguro",
+                "category": "sci-fi",
+                "price": 12.99,
+                "quantity": 1,
+                "bookStore": "StoreB",
+                "bookStoreBranch": "Budapest"
+            },
+            {
+                "ISBN": "9780316409131",
+                "title": "Upheaval: Turning Points for Nations in Crisis",
+                "author": "Jarred Diamond",
+                "category": "history",
+                "price": 11.99,
+                "quantity": 1,
+                "bookStore": "StoreA",
+                "bookStoreBranch": "Eger"
+            }
+        ]
+    }
+]
