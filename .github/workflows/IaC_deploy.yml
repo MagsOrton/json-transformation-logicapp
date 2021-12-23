@@ -1,4 +1,4 @@
-name: (classic) Logic App Infrastructure as Code Pipeline. 
+name: Logic App Infrastructure as Code Pipeline. 
 
 on:
   workflow_dispatch:
