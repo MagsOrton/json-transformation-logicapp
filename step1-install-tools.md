@@ -1,5 +1,5 @@
 # Prepare your working environment
-* Go througth [Prerequisites section](#https://docs.microsoft.com/en-us/azure/logic-apps/create-single-tenant-workflows-visual-studio-code#prerequisites) to set up your working environment.
+* Go througth [Prerequisites section](#'https://docs.microsoft.com/en-us/azure/logic-apps/create-single-tenant-workflows-visual-studio-code#prerequisites') to set up your working environment.
 
 * [Set up Visual Studio Code](#https://docs.microsoft.com/en-us/azure/logic-apps/create-single-tenant-workflows-visual-studio-code#set-up-visual-studio-code).
 
