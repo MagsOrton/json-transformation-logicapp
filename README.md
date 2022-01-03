@@ -23,6 +23,6 @@ Secrets need to be stored in Azure KeyVault
 
 [MBO Parameters](params.json)
 
-[MBO Payload](params.json)
+[MBO Payload](mbo-payload.json)
 
 

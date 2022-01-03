@@ -3,88 +3,85 @@
         "jobParams": {
             "jobName": "newOrder",
             "jobPriority": "medium",
-            "jobId" :"40ef4839-ed4d-4bc1-8338-5bb6ce90557c"
+            "jobId": "40ef4839-ed4d-4bc1-8338-5bb6ce90557c",
+            "bookStore": "StoreA"
         },
-        "jobPayload": [
-            {
-                "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
-                "orderDate": "2021-03-19T07:22Z",
-                "coreAPIURL": "https://order-engine.storeb.com/API/core",
-                "tenantName": "storea.com",
-                "AppId": "2de6a36b-89f0-4ef3-a8ce-191402ed2a1a",
-                "AppSecret": "coreAPIA-BigSecret",
-                "retryAttempts": 3,
-                "retryInterval": 5,
-                "logLevel": "info",
-                "deliveryAddress": {
-                    "firstName": "Bob",
-                    "lastName": "Mustermann",
-                    "city": "Budapest",
-                    "country": "Hungary",
-                    "postalCode": "1073",
-                    "streetAddress": "Liszt Ferenc tér 5"
+        "jobPayload": {
+            "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
+            "orderDate": "2021-03-19T07:22Z",
+            "coreAPIURL": "https://order-engine.storeb.com/API/core",
+            "tenantName": "storea.com",
+            "AppId": "2de6a36b-89f0-4ef3-a8ce-191402ed2a1a",
+            "AppSecret": "coreAPIA-BigSecret",
+            "retryAttempts": 3,
+            "retryInterval": 5,
+            "logLevel": "info",
+            "deliveryAddress": {
+                "firstName": "Bob",
+                "lastName": "Mustermann",
+                "city": "Budapest",
+                "country": "Hungary",
+                "postalCode": "1073",
+                "streetAddress": "Liszt Ferenc tér 5"
+            },
+            "orderItems": [
+                {
+                    "ISBN": "9783060311354",
+                    "title": "Fahrenheit 451",
+                    "author": "Ray Bradbury",
+                    "category": "sci-fi",
+                    "price": 11.99,
+                    "quantity": 1,
+                    "bookStoreBranch": "Budapest"
                 },
-                "orderItems": [
-                    {
-                        "ISBN": "9783060311354",
-                        "title": "Fahrenheit 451",
-                        "author": "Ray Bradbury",
-                        "category": "sci-fi",
-                        "price": 11.99,
-                        "quantity": 1,
-                        "bookStoreBranch": "Budapest"
-                    },
-                    {
-                        "ISBN": "9780316409131",
-                        "title": "Upheaval: Turning Points for Nations in Crisis",
-                        "author": "Jarred Diamond",
-                        "category": "history",
-                        "price": 11.99,
-                        "quantity": 1,
-                        "bookStoreBranch": "Eger"
-                    }
-                ]
-            }
-        ]
+                {
+                    "ISBN": "9780316409131",
+                    "title": "Upheaval: Turning Points for Nations in Crisis",
+                    "author": "Jarred Diamond",
+                    "category": "history",
+                    "price": 11.99,
+                    "quantity": 1,
+                    "bookStoreBranch": "Eger"
+                }
+            ]
+        }
     },
     {
         "jobParams": {
             "jobName": "newOrder",
             "jobPriority": "medium",
-            "jobId": "93a5dc9d-56e2-418d-80ec-bcbf9df33b47"
+            "jobId": "93a5dc9d-56e2-418d-80ec-bcbf9df33b47",
+            "bookStore": "StoreB"
         },
-        "jobPayload": [
-            {
-                "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
-                "orderDate": "2021-03-19T07:22Z",
-                "coreAPIURL": "https://order-engine.storeb.com/API/core",
-                "tenantName": "storeb.com",
-                "AppId": "61612ba2-5672-4aa2-bfec-18886177871e",
-                "AppSecret": "coreAPIB-BigSecret",
-                "retryAttempts": 5,
-                "retryInterval": 2,
-                "logLevel": "error",
-                "deliveryAddress": {
-                    "firstName": "Bob",
-                    "lastName": "Mustermann",
-                    "city": "Budapest",
-                    "country": "Hungary",
-                    "postalCode": "1073",
-                    "streetAddress": "Liszt Ferenc tér 5"
-                },
-                "orderItems": [
-                    {
-                        "ISBN": "9780571258093",
-                        "title": "Never let me go",
-                        "author": "Kazuro Ishiguro",
-                        "category": "sci-fi",
-                        "price": 12.99,
-                        "quantity": 1,
-                        "bookStore": "StoreB",
-                        "bookStoreBranch": "Budapest"
-                    }
-                ]
-            }
-        ]
+        "jobPayload": {
+            "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
+            "orderDate": "2021-03-19T07:22Z",
+            "coreAPIURL": "https://order-engine.storeb.com/API/core",
+            "tenantName": "storeb.com",
+            "AppId": "61612ba2-5672-4aa2-bfec-18886177871e",
+            "AppSecret": "coreAPIB-BigSecret",
+            "retryAttempts": 5,
+            "retryInterval": 2,
+            "logLevel": "error",
+            "deliveryAddress": {
+                "firstName": "Bob",
+                "lastName": "Mustermann",
+                "city": "Budapest",
+                "country": "Hungary",
+                "postalCode": "1073",
+                "streetAddress": "Liszt Ferenc tér 5"
+            },
+            "orderItems": [
+                {
+                    "ISBN": "9780571258093",
+                    "title": "Never let me go",
+                    "author": "Kazuro Ishiguro",
+                    "category": "sci-fi",
+                    "price": 12.99,
+                    "quantity": 1,
+                    "bookStoreBranch": "Budapest"
+                }
+            ]
+        }
     }
 ]
