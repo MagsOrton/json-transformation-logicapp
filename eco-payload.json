@@ -19,7 +19,7 @@
                 "price": 11.99,
                 "quantity": 1,
                 "bookStore": "StoreA",
-                "bookStoreBranch": "Budapest"        
+                "bookStoreBranch": "Budapest"
             },
             {
                 "ISBN": "9780571258093",

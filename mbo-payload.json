@@ -3,7 +3,8 @@
         "jobParams": {
             "jobName": "newOrder",
             "jobPriority": "medium",
-            "jobId": "40ef4839-ed4d-4bc1-8338-5bb6ce90557c"
+            "jobId": "40ef4839-ed4d-4bc1-8338-5bb6ce90557c",
+            "bookStore": "StoreA"
         },
         "jobPayload": {
             "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
@@ -49,7 +50,8 @@
         "jobParams": {
             "jobName": "newOrder",
             "jobPriority": "medium",
-            "jobId": "93a5dc9d-56e2-418d-80ec-bcbf9df33b47"
+            "jobId": "93a5dc9d-56e2-418d-80ec-bcbf9df33b47",
+            "bookStore": "StoreB"
         },
         "jobPayload": {
             "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
@@ -77,7 +79,6 @@
                     "category": "sci-fi",
                     "price": 12.99,
                     "quantity": 1,
-                    "bookStore": "StoreB",
                     "bookStoreBranch": "Budapest"
                 }
             ]
