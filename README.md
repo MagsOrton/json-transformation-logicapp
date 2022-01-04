@@ -26,7 +26,12 @@ Secrets need to be stored in Azure KeyVault
 [MBO Payload](mbo-payload.json)
 
 ## Setting up your development environment
-We prefer to use Visual Studio Code and not Azure Portal for the development of the Logic Apps. You can run and debug your Logic Apps on your local development machine 
+---
+**NOTE**
+No Azure Subscription will be needed for this tutorial.
+
+--- 
+In this tutorial we will use Visual Studio Code and not the Azure Portal for the development of the Logic Apps. You can run and debug your Logic Apps on your local development machine. 
 This became possible after the introduction of the Single-Tenant Logic Apps (Standard) resource type.
 The Standard resource type allows you to run many Logic App workflows in one Logic App application. This runtime uses the Azure Functions extensibility model and is hosted as an extension on the Azure Functions runtime. [More information here](https://docs.microsoft.com/en-us/azure/logic-apps/single-tenant-overview-compare#logic-app-standard-resource)   
 
@@ -49,7 +54,7 @@ My Windows machine runs .NET 6 and Azure Functions Core Tools V4, for that reaso
 
 ---
 
-1. Create your Logic App
+Create your Logic App
 
 ![](docs/media/2022-01-03-15-26-03.png)
 
@@ -249,5 +254,176 @@ Now you can click into each Action to see the results of the individual action e
 
 ![](docs/media/2022-01-03-17-43-42.png)
 
+There is one important difference between the variables and the action [output values](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-definition-language#outputs) - you can change the variable value after you initialized it with the [Set Variable action as described here](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-create-variables-store-values), but you cannot do it with the output values of the compose action. We often use Compose action to debug a number of variables and output values. 
 
+Please also be aware of the [implicit data type conversions](https://docs.microsoft.com/en-us/azure/logic-apps/workflow-definition-language-functions-reference#implicit-data-type-conversions)  
 
+Additionally, as you improve your Logic App skills, you might decide to work with the [Expression Editor and the workflow.json code, or directly editing the workflow.json file](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-workflow-definition-language#expressions) 
+
+## Dealing with Objects and Json data in Logic Apps
+
+Let's create a new workflow from the VS Code Command Palette
+
+![](docs/media/2022-01-04-10-28-47.png)
+
+Select Stateful Workflow
+
+![](docs/media/2022-01-04-10-29-30.png)
+
+Give it a name
+
+![](docs/media/2022-01-04-10-30-36.png)
+
+you will see a new workflow folder in your Logic App project
+
+![](docs/media/2022-01-04-10-31-37.png)
+
+Open it in the designer and create a simple HTTP Request-Response workflow similar to one we created above and save it
+
+![](docs/media/2022-01-04-10-34-24.png)
+
+Select your HTTP Request Trigger and click on "use sample payload to generate schema". Your Logic App will create a schema and will be able to parse the HTTP payload into values you can use for the further actions.
+
+![](docs/media/2022-01-04-10-38-14.png)
+
+add one ECO Order payload as a sample to generate schema 
+
+````
+    {
+        "orderId": "66e62767-c1cd-46b9-8c9e-f8900a790910",
+        "orderDate": "2021-03-19T07:22Z",
+        "deliveryAddress": {
+            "firstName": "Bob",
+            "lastName": "Mustermann",
+            "city": "Budapest",
+            "country": "Hungary",
+            "postalCode": "1073",
+            "streetAddress": "Liszt Ferenc tér 5"
+        },
+        "orderItems": [
+            {
+                "ISBN": "9783060311354",
+                "title": "Fahrenheit 451",
+                "author": "Ray Bradbury",
+                "category": "sci-fi",
+                "price": 11.99,
+                "quantity": 1,
+                "bookStore": "StoreA",
+                "bookStoreBranch": "Budapest"
+            },
+            {
+                "ISBN": "9780571258093",
+                "title": "Never let me go",
+                "author": "Kazuro Ishiguro",
+                "category": "sci-fi",
+                "price": 12.99,
+                "quantity": 1,
+                "bookStore": "StoreB",
+                "bookStoreBranch": "Budapest"
+            },
+            {
+                "ISBN": "9780316409131",
+                "title": "Upheaval: Turning Points for Nations in Crisis",
+                "author": "Jarred Diamond",
+                "category": "history",
+                "price": 11.99,
+                "quantity": 1,
+                "bookStore": "StoreA",
+                "bookStoreBranch": "Eger"
+            }
+        ]
+    }
+````
+
+![](docs/media/2022-01-04-10-40-19.png)
+
+and press Done button. You will also be notified that our HTTP requests will need to provide 
+````
+Content-Type: application/json
+````
+
+Select the Response Action and for the add the Request Body to the response content
+
+![](docs/media/2022-01-04-10-45-14.png)
+
+![](docs/media/2022-01-04-10-45-34.png)
+
+Save your workflow and create another test.http file in your new workflow body. This time we use the HTTP POST method and add the ECO single order payload to it 
+
+![](docs/media/2022-01-04-10-50-20.png)
+
+Open your workflows overview and grab the callback URL and insert it between POST and HTTP/1.1 tokens in the test.http file
+
+![](docs/media/2022-01-04-10-54-42.png)
+
+Click on "send request" and see the output of your workflow. You might also decide to explore the run history in the workflow overview.
+
+![](docs/media/2022-01-04-10-58-00.png)
+
+Now we can start exploring the work with Object and Json data.
+
+Add a new Compose action between the Request trigger and the Response action
+
+Click in Inputs in your new Compose action. Because we provided a sample payload to our trigger you are able to see the parsed tokens from our HTTP payload. 
+
+![](docs/media/2022-01-04-11-51-23.png)
+
+There is nothing wrong if the parsed HTTP Trigger body satisfies your requerements and you can use it for your Logic App. But what happens if you want to deal with the json variables and action outputs - how do you navigate through the Json object attributes, nested attributes and arrays? What if you are not using HTTP Trigger in your Logic App but receive a Json object you need to deal with?
+
+Let's create a new variable of type Json and assign its value to the value of the HTTP Trigger Body.
+
+You can remove your Compose action if you already saved the workflow and initialize a new variable
+
+![](docs/media/2022-01-04-12-07-49.png)
+
+Change the response content to this new variable
+
+![](docs/media/2022-01-04-12-08-42.png)
+
+save it and run your http test - it should return the same result, but now from the variable value
+
+![](docs/media/2022-01-04-12-11-21.png)
+
+Now we can dissect our Json object derived from the HTTP Trigger body.
+
+---
+**NOTE**
+You can also create a Json object from the scratch using the ![Compose action as shown here](https://docs.microsoft.com/en-us/azure/logic-apps/media/logic-apps-perform-data-operations/configure-compose-action.png) and use it as an output from the Compose action.
+
+---
+
+Add a new Compose action after the Initialize ECOVariable action, switch to the expression editor and type "variables(" it will be autocompleted into "variables()"
+
+![](docs/media/2022-01-04-12-27-13.png)
+
+type
+
+````
+variables('ECOVariable').deliveryAddress)
+````
+---
+**NOTE**
+although the expression above will work here, in some cases we might refer to none existing Json attributes and that will cause an exception in your Logic App. For that reason we recommend to use the following notation using the ? operator which will substitute null or not existing values into empty strings
+
+````
+variables('ECOVariable')?.deliveryAddress)
+````
+
+---
+
+Replace the Response content into output of your Compose action
+
+![](docs/media/2022-01-04-12-52-22.png)
+
+Run your test again and validate the result
+
+![](docs/media/2022-01-04-12-54-16.png)
+
+You can also decide and rather [parse your Json object](https://docs.microsoft.com/en-us/azure/logic-apps/logic-apps-perform-data-operations#parse-json-action) and use user-friendly tokens for the Json properties
+
+![](docs/media/2022-01-04-14-57-11.png)
+
+add the output of the Select Delivery Address action
+
+![](docs/media/2022-01-04-14-59-44.png)
+ 
