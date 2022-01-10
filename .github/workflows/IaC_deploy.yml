@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "ARM/**"
+      - "solution/ARM/**"
       - ".github/workflows/IaC_deploy.yml"
       
 
@@ -34,8 +34,8 @@ jobs:
         scope: resourcegroup  
         subscriptionId: ${{ secrets.AZURE_SUB }}
         resourceGroupName:  ${{ secrets.RG_LA }}
-        template: ARM/la-template.json  # Set this to the location of your template file
-        parameters: ARM/la-parameters.json # Set this to the location of your parameters file
+        template: solution/ARM/la-template.json  # Set this to the location of your template file
+        parameters: solution/ARM/la-parameters.json # Set this to the location of your parameters file
         deploymentMode: Incremental
    
  
