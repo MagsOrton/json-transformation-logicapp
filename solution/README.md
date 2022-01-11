@@ -1,6 +1,6 @@
 # Hands-On-Labs - Basic Enterprise Integration with Logic Apps. JSON transformation with Parameters
 
-## DevOps with GitHub
+## Logic Apps DevOps with GitHub
 
 The single-tenant model gives you the capability to separate the concerns between app and the underlying infrastructure. Logic app workflows typically have "application code" that you update more often than the underlying infrastructure. By separating these layers, you can focus more on building out your logic app's workflow and spend less on your effort to deploy the required resources across multiple environments.
 
