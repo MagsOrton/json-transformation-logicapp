@@ -388,7 +388,9 @@ Now we can dissect our Json object derived from the HTTP Trigger body.
 
 ---
 **NOTE**
-You can also create a Json object from the scratch using the ![Compose action as shown here](https://docs.microsoft.com/en-us/azure/logic-apps/media/logic-apps-perform-data-operations/configure-compose-action.png) and use it as an output from the Compose action.
+You can also create a Json object from the scratch using the Compose action as shown here 
+
+![](https://docs.microsoft.com/en-us/azure/logic-apps/media/logic-apps-perform-data-operations/configure-compose-action.png) and use it as an output from the Compose action.
 
 ---
 
