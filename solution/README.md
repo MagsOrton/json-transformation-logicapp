@@ -47,6 +47,6 @@ on:
       - ".github/workflows/IaC_deploy.yml"
 ```
 
-To test the the pipeline works you can make a change to the yml file and navigate to the ``` Actions  ``` tab in your GitHub repository.
+To test that the pipeline works you can make a change to the .yml file and navigate to the ``` Actions  ``` tab in your GitHub repository.
 
 ![](../docs/media/IoC-pipeline.png)
