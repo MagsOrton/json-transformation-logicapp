@@ -32,3 +32,21 @@ The ARM folder contains the ARM templates required to deploy all the required lo
 - App Service Plan
 - Storage Account
 
+After the resources are provisioned, the Application Settions of Logic App will be updated with the storage account connection string for teh newly created storage account.
+
+To deploy this ARM template we need to create a GitHub Action. Workflow files use YAML syntax, and must have either a ``` .yml ``` or ``` .yaml ``` file extension. You must store workflow files in the ``` .github/workflows ``` directory of your repository. 
+
+``` .github/workflows/IaC_deploy.yml ``` is a sample pipeline that will be triggered when either files inside ``` ARM ``` folder get changed or the ``` .github/workflows/IaC_deploy.yml ``` file itself gets changed. The trigger is specified at the very top of the ``` IaC_deploy.yml ``` file
+
+ ```
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "solution/ARM/**"
+      - ".github/workflows/IaC_deploy.yml"
+```
+
+To test the the pipeline works you can make a change to the yml file and navigate to the ``` Actions  ``` tab in your GitHub repository.
+
+![](../docs/media/IoC-pipeline.png)
