@@ -429,3 +429,9 @@ add the output of the Select Delivery Address action
 
 ![](docs/media/2022-01-04-14-59-44.png)
  
+Refer to the run history to see the result
+
+![](docs/media/2022-01-11-15-56-42.png)
+
+## Dealing with the Logic App Properties
+
