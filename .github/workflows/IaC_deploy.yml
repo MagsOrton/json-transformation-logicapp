@@ -25,7 +25,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
 
-    # Deployment of template  
+    # Deployment of ARM template  
     - name: Deploy Logic App Resources
       uses: Azure/arm-deploy@v1.0.1
       id: ladeploy
