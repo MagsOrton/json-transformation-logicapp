@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": { 
+        "location": {
+            "value": "uksouth"
+        },
+        "environmentName": {
+            "value": "env-name"
+        },
+        "projectName": {
+            "value": "project-name"
+        },
+        "logicAppName": {
+            "value": "laname-467657"
+        },
+        "appServicePlanName": {
+            "value": "asp-name-2432423"
+        },
+        "storageName": {
+            "value": "storageaccount9879873"
+        },
+        "kind": {
+            "value": "StorageV2"
+        },
+        "skuName": {
+            "value": "Standard_LRS"
+        },
+        "skuTier": {
+            "value": "Standard"
+          }
+        }
+    }
