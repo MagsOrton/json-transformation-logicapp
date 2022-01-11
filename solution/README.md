@@ -36,7 +36,7 @@ After the resources are provisioned, the Application Settions of Logic App will 
 
 To deploy this ARM template we need to create a GitHub Action. Workflow files use YAML syntax, and must have either a ``` .yml ``` or ``` .yaml ``` file extension. You must store workflow files in the ``` .github/workflows ``` directory of your repository. 
 
-``` .github/workflows/IaC_deploy.yml ``` is a sample pipeline that will be triggered when either files inside ``` ARM ``` folder get changed or the ``` .github/workflows/IaC_deploy.yml ``` file itself gets changed. The trigger is specified at the very top of the ``` IaC_deploy.yml ``` file
+``` .github/workflows/IaC_deploy.yml ``` is a sample pipeline that will be triggered when either files inside ``` ARM ``` folder get changed or the ``` .github/workflows/IaC_deploy.yml ``` file itself gets changed. The trigger is specified at the very top of the ``` IaC_deploy.yml ``` file.
 
  ```
 on:
@@ -53,3 +53,26 @@ To test that the pipeline works you can make a change to the .yml file and navig
 
 Note that if the resource already exists in the resource group and its settings are unchanged, no operation is taken for that resource. If you change the property values for a resource, the resource is updated with those new values. You can read more about Azure Resource Manager deployment modes 
 [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deployment-modes).
+
+### Deploying Logic Apps Workflow
+
+The pipeline to deploy the Logic Apps workflow will need to build and then deploy the workflow to Azure.
+``` .github/workflows/logicapp_deploy.yml ``` is a sample pipeline that will be triggered when IoC pipeline completed of when files inside  the ``` logic ``` folder get changed or the ``` .github/workflows/logicapp_deploy.yml ``` file itself gets changed. The trigger is specified at the very top of the ``` logicapp_deploy.yml ``` file
+
+```
+on:
+  workflow_dispatch:
+    # Trigger the workflow every time the infrastructure build workflow ran to completion
+  workflow_run:
+    workflows:
+      - Logic App Infrastructure as Code Pipeline.
+    types:
+      - completed
+  # Triggers when Logic Apps workflow logic has changed 
+  push:
+    paths:
+      - "logic/**"
+      - ".github/workflows/logicapp_deploy.yml"
+```
+
+To test that the pipeline works you can make a change to the Logic Apps workflow and navigate to the ``` Actions  ``` tab in your GitHub repository.
