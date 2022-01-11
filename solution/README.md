@@ -50,3 +50,6 @@ on:
 To test that the pipeline works you can make a change to the .yml file and navigate to the ``` Actions  ``` tab in your GitHub repository.
 
 ![](../docs/media/IoC-pipeline.png)
+
+Note that if the resource already exists in the resource group and its settings are unchanged, no operation is taken for that resource. If you change the property values for a resource, the resource is updated with those new values. You can read more about Azure Resource Manager deployment modes 
+[here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/deployment-modes).
