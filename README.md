@@ -433,5 +433,62 @@ Refer to the run history to see the result
 
 ![](docs/media/2022-01-11-15-56-42.png)
 
-## Dealing with the Logic App Properties
+## Dealing with the Logic App Parameters
+In Azure Logic Apps, you can abstract values that might change in your workflows across your development, test, and production environments by defining parameters. When you use parameters instead, you can focus more on designing your workflows, and insert your environment-specific variables later.
+
+This article introduces how parameters work in single-tenant Azure Logic Apps and how to edit, reference, and manage environment variables using the single-tenant parameters experience.
+
+[Create parameters to use in single-tenant Azure Logic Apps](https://docs.microsoft.com/en-us/azure/logic-apps/parameterize-workflow-app?tabs=azure-portal)
+
+Let's create a new parameter of type object for our Logic App
+
+![](docs/media/2022-01-12-16-10-55.png) 
+
+Paste the Json content of your desired parameters from [MBO Parameters](params.json)
+
+![](docs/media/2022-01-12-16-14-23.png)
+
+close the window an open the parameters configuration again
+
+![](docs/media/2022-01-12-16-15-56.png)
+
+After you save your workflow you will discover a new parameter file at the top level of your Logic App. Be aware that all workflows inside of your single-tenant Logic Apps will share the same parameters. If you wish, you can add additional parameters of different types to your Logic App.
+
+![](docs/media/2022-01-12-16-19-14.png)
+
+As you can see from the content of the files, it is slighthly different from the original content defining the type and the value of the parameter
+
+![](docs/media/2022-01-12-16-27-19.png)
+
+Let's read StoreA parameter values in the Compose action
+
+![](docs/media/2022-01-12-16-38-44.png)
+
+and validate the value in the run history after triggering the URL in the  test.http file
+
+![](docs/media/2022-01-12-16-39-42.png)
+
+now let's select just a single parameter in a new compose action again and validate the value in the run history after triggering the URL in the  test.http file
+
+![](docs/media/2022-01-12-16-44-58.png)
+
+and the result in the run history is 
+
+![](docs/media/2022-01-12-16-45-44.png)
+
+---
+**NOTE**
+Since we have an array of shop specific parameters, we use the "[]" operator to access one particular shop data. Once we have this array item, we can access its property by the "." operator
+Be aware, that this is still best practice to use "?" operator to avoid exception in your workflow. Below are corrected sample expressions
+
+````
+parameters('MBOParams')?['StoreA']
+````
+
+````
+parameters('MBOParams')?['StoreA']?.serviceEndpoint
+````
+
+---
+
 
