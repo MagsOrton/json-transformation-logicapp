@@ -492,3 +492,5 @@ parameters('MBOParams')?['StoreA']?.serviceEndpoint
 ---
 
 
+# Scenario Solution
+
