@@ -72,6 +72,7 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
+*.dll
 
 # Chutzpah Test files
 _Chutzpah*
@@ -270,3 +271,4 @@ __queuestorage__/
 
 #testing with REST 
 testing/
+*.http

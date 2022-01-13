@@ -1,0 +1,278 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Initialize_mboArray": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "mboArray",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {},
+                "description": "My first comment"
+            },
+            "For_each_eco_order": {
+                "type": "Foreach",
+                "foreach": "@triggerBody()",
+                "actions": {
+                    "For_each_eco_order_item": {
+                        "type": "Foreach",
+                        "foreach": "@items('For_each_eco_order')['orderItems']",
+                        "actions": {
+                            "is_the_mbo_array_is_empty_or_has_the_store_in_it": {
+                                "type": "If",
+                                "expression": {
+                                    "or": [
+                                        {
+                                            "equals": [
+                                                "@length(body('find_mbo_item_for_a_store'))",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "create_mbo_item": {
+                                        "type": "Compose",
+                                        "inputs": {
+                                            "jobParams": {
+                                                "jobName": "newOrder",
+                                                "jobPriority": "medium",
+                                                "jobId": "@{guid()}",
+                                                "bookStore": "@{items('For_each_eco_order_item')['bookStore']}"
+                                            },
+                                            "jobPayload": {
+                                                "orderId": "@{items('For_each_eco_order')['orderId']}",
+                                                "orderDate": "@{items('For_each_eco_order')['orderDate']}",
+                                                "coreAPIURL": "@{outputs('get_store_params')['serviceEndpoint']}",
+                                                "tenantName": "@{outputs('get_store_params')['OAuthTenantName']}",
+                                                "AppId": "@{outputs('get_store_params')['OAuthAppId']}",
+                                                "AppSecret": "@{outputs('get_store_params')['OAuthAppSecret']}",
+                                                "retryAttempts": "@outputs('get_store_params')['retryAttempts']",
+                                                "retryInterval": "@outputs('get_store_params')['retryInterval']",
+                                                "logLevel": "@{outputs('get_store_params')['logLevel']}",
+                                                "deliveryAddress": {
+                                                    "firstName": "@{items('For_each_eco_order')?['deliveryAddress']?['firstName']}",
+                                                    "lastName": "@{items('For_each_eco_order')?['deliveryAddress']?['lastName']}",
+                                                    "city": "@{items('For_each_eco_order')?['deliveryAddress']?['city']}",
+                                                    "country": "@{items('For_each_eco_order')?['deliveryAddress']?['country']}",
+                                                    "postalCode": "@{items('For_each_eco_order')?['deliveryAddress']?['postalCode']}",
+                                                    "streetAddress": "@{items('For_each_eco_order')?['deliveryAddress']?['streetAddress']}"
+                                                }
+                                            },
+                                            "orderItems": []
+                                        },
+                                        "runAfter": {
+                                            "get_store_params": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    },
+                                    "select_all_eco_items_for_the_current_store": {
+                                        "type": "Query",
+                                        "inputs": {
+                                            "from": "@items('For_each_eco_order')['orderItems']",
+                                            "where": "@equals(item()?.bookStore, items('For_each_eco_order_item')?.bookStore)"
+                                        },
+                                        "runAfter": {
+                                            "create_mbo_item": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    },
+                                    "add_eco_items_to_the_mbo_item": {
+                                        "type": "Compose",
+                                        "inputs": "@setProperty(outputs('create_mbo_item'),'orderItems', body('render_eco_items_before_adding_them_to_the_mbo_item'))",
+                                        "runAfter": {
+                                            "render_eco_items_before_adding_them_to_the_mbo_item": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    },
+                                    "add_mbo_item_to_mboArray": {
+                                        "type": "AppendToArrayVariable",
+                                        "inputs": {
+                                            "name": "mboArray",
+                                            "value": "@outputs('add_eco_items_to_the_mbo_item')"
+                                        },
+                                        "runAfter": {
+                                            "add_eco_items_to_the_mbo_item": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    },
+                                    "render_eco_items_before_adding_them_to_the_mbo_item": {
+                                        "type": "Select",
+                                        "inputs": {
+                                            "from": "@body('select_all_eco_items_for_the_current_store')",
+                                            "select": {
+                                                "ISBN": "@item()['ISBN']",
+                                                "title": "@item()['title']",
+                                                "author": "@item()['author']",
+                                                "category": "@item()['category']",
+                                                "price": "@item()['price']",
+                                                "quantity": "@item()['quantity']",
+                                                "bookStoreBranch": "@item()['bookStoreBranch']"
+                                            }
+                                        },
+                                        "runAfter": {
+                                            "select_all_eco_items_for_the_current_store": [
+                                                "Succeeded"
+                                            ]
+                                        }
+                                    },
+                                    "get_store_params": {
+                                        "type": "Compose",
+                                        "inputs": "@parameters('mboParams')[items('For_each_eco_order_item')['bookStore']]",
+                                        "runAfter": {}
+                                    }
+                                },
+                                "runAfter": {
+                                    "find_mbo_item_for_a_store": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            },
+                            "debug": {
+                                "type": "Compose",
+                                "inputs": "@{items('For_each_eco_order_item')['bookStore']}\n-------------------------\n@{variables('mboArray')}",
+                                "runAfter": {}
+                            },
+                            "find_mbo_item_for_a_store": {
+                                "type": "Query",
+                                "inputs": {
+                                    "from": "@variables('mboArray')",
+                                    "where": "@equals(item().jobParams.bookStore, items('For_each_eco_order_item')['bookStore'])"
+                                },
+                                "runAfter": {
+                                    "debug": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            }
+                        },
+                        "runAfter": {}
+                    }
+                },
+                "runAfter": {
+                    "Initialize_mboArray": [
+                        "Succeeded"
+                    ]
+                }
+            },
+            "Response": {
+                "type": "Response",
+                "kind": "http",
+                "inputs": {
+                    "statusCode": 200,
+                    "body": "@variables('mboArray')"
+                },
+                "runAfter": {
+                    "For_each_eco_order": [
+                        "Succeeded"
+                    ]
+                }
+            }
+        },
+        "triggers": {
+            "manual": {
+                "type": "Request",
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "orderId": {
+                                    "type": "string"
+                                },
+                                "orderDate": {
+                                    "type": "string"
+                                },
+                                "deliveryAddress": {
+                                    "type": "object",
+                                    "properties": {
+                                        "firstName": {
+                                            "type": "string"
+                                        },
+                                        "lastName": {
+                                            "type": "string"
+                                        },
+                                        "city": {
+                                            "type": "string"
+                                        },
+                                        "country": {
+                                            "type": "string"
+                                        },
+                                        "postalCode": {
+                                            "type": "string"
+                                        },
+                                        "streetAddress": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "orderItems": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ISBN": {
+                                                "type": "string"
+                                            },
+                                            "title": {
+                                                "type": "string"
+                                            },
+                                            "author": {
+                                                "type": "string"
+                                            },
+                                            "category": {
+                                                "type": "string"
+                                            },
+                                            "price": {
+                                                "type": "number"
+                                            },
+                                            "quantity": {
+                                                "type": "integer"
+                                            },
+                                            "bookStore": {
+                                                "type": "string"
+                                            },
+                                            "bookStoreBranch": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "ISBN",
+                                            "title",
+                                            "author",
+                                            "category",
+                                            "price",
+                                            "quantity",
+                                            "bookStore",
+                                            "bookStoreBranch"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "orderId",
+                                "orderDate",
+                                "deliveryAddress",
+                                "orderItems"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {}
+    },
+    "kind": "Stateful"
+}
