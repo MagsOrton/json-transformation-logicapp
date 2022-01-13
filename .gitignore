@@ -270,3 +270,4 @@ __queuestorage__/
 
 #testing with REST 
 testing/
+*.http
