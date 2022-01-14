@@ -15,7 +15,7 @@ They created a new cloud based highly scalable e-commerce portal with the e-Comm
 
 Since Contoso Books team is consisting of IT professionals and not software engineers, they decided to use Azure Logic Apps for the integration purposes.
 
-Secrets need to be stored in Azure KeyVault
+Contoso Books IT professionals would like to implement CI/CD for both Instrastructure (and treat it as code - IaC) and also for the workflows they develop.  
 
 ### Contoso Books sample payloads:
 
@@ -492,5 +492,11 @@ parameters('MBOParams')?['StoreA']?.serviceEndpoint
 ---
 
 
-# Scenario Solution
+## Scenario Solution proposal
+
+As you might have discovered, the solution needs to implement an iteration over each ECO order, select ECO order items for each book store and create an MBO job for each book store contaiing only the selected ECO order items.
+
+
+
+
 
