@@ -15,7 +15,7 @@ They created a new cloud based highly scalable e-commerce portal with the e-Comm
 
 Since Contoso Books team is consisting of IT professionals and not software engineers, they decided to use Azure Logic Apps for the integration purposes.
 
-Secrets need to be stored in Azure KeyVault
+Contoso Books IT professionals would like to implement CI/CD for both Instrastructure (and treat it as code - IaC) and also for the workflows they develop.  
 
 ### Contoso Books sample payloads:
 
@@ -492,5 +492,29 @@ parameters('MBOParams')?['StoreA']?.serviceEndpoint
 ---
 
 
-# Scenario Solution
+## Scenario Solution proposal
 
+As you might have discovered, the solution needs to implement an iteration over each ECO order, select ECO order items for each book store and create an MBO job for each book store contaiing only the selected ECO order items, and adding all necessary parameters values.
+
+picture below is the expected result omitting some details
+![](docs/media/draft_result.jpg) 
+
+We will not go into the details of the solution implementation [here](solution/logic), but there are definitely other alternatives for the json array transformation. Feel free to explore the solution and the workflow actions used there.
+
+![](docs/media/jsontransformworkflow.jpg) 
+
+---
+**NOTE**
+The real solution does not return the result as an HTTP response, but rather sends it to the MBO service
+
+---
+
+## CI/CD
+
+Two GitHub actions were created for CI/CD :
+
+Infrastructure as a code - to create all [necessary Azure resources](.github/workflows/IaC_deploy.yml)
+
+and the GitHub action for the workflow [code deployment](.github/workflows/logicapp_deploy.yml) 
+
+More information on CI/CD is [here](solution/README.md) 
