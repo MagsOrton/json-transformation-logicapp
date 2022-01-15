@@ -499,9 +499,25 @@ As you might have discovered, the solution needs to implement an iteration over 
 picture below is the expected result omitting some details
 ![](docs/media/draft_result.jpg) 
 
-We will not go into the details of the solution implementation [here](solution/logic), but there are definitely other alternatives for the json array transformation. Feel free to explore the solution and the workflow actions used there.
+We will not go into the details of the solution implementation [here](solution/logic), but there are definitely other alternatives for the json array transformation. Feel free to explore the solution and the workflow actions used there. 
+1. Clone this repository
+2. change the current directory to 
+json-transformation-logicapp/solution/logic
+3. start VS Code with "code ."
+4. start Azurite from the VS Code command palette
+5. start the Logic App
+6. select ECO2MBO folder and the workflow.json file there and call from the context menu "overview" and copy the workflow endpoint URL from there 
+7. create a test.http file as it was done above and provide the [ECO payload](eco-payload.json) and the endpoint URL for the POST request 
+8. run the http POST request and see the result
+9. go to the "overview" context menu of the workflow, refresh the run history, select the latest run and navigate through the actions results to better understand the workflow logic
+10. switch to the context "Open in Designer" from the workflow.json and have a look at the workflow design. 
 
 ![](docs/media/jsontransformworkflow.jpg) 
+
+Since we gave each action a custom name and the symbols are looking similar, go to the "About" section of the actions to see the type of action. Here is an example:
+![](docs/media/2022-01-15-11-28-47.png)    
+
+
 
 ---
 **NOTE**
