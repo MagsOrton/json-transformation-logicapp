@@ -588,9 +588,60 @@ You can deploy your Logic App to Azure directly from the Visual Studio Code comm
 
 ---
 
-Here the resources for the newly created Logic App (Application Insights creating was skipped, but you will definitely need it for the production deployments)
+Here are the resources for the newly created Logic App (Application Insights creation was skipped, but you will definitely need it for the production deployments)
 
+![](docs/media/2022-01-23-21-26-14.png)
 
+[Create a KeyVault resource](https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal#sign-in-to-azure) in this resource group
+
+Your resource group will contain the newly created KeyVault 
+
+![](docs/media/2022-01-23-21-31-20.png)
+
+Create a new Access Policy so that your Logic App is able to read secrets
+
+![](docs/media/2022-01-23-21-33-15.png)
+
+![](docs/media/2022-01-23-21-35-01.png)
+
+search for your Logic App managed identity by name 
+
+![](docs/media/2022-01-23-21-37-00.png)
+
+Click "next" and finish creating the access policy 
+
+![](docs/media/2022-01-23-21-39-35.png)
+
+Select the configuration of your Logic App and add the App Settings
+
+![](docs/media/2022-01-23-21-45-09.png)
+
+and save them
+
+Create corresponding secrets in the KeyVault
+
+![](docs/media/2022-01-23-21-49-46.png)
+
+![](docs/media/2022-01-23-21-52-06.png)
+
+![](docs/media/2022-01-23-21-59-50.png)
+
+Refer KeyVault values in your App Settings 
+
+Use the following syntax to refer to the secrets
+
+````
+@Microsoft.KeyVault(SecretUri=https://warm-up-la.vault.azure.net/secrets/StoreA-OAuthAppSecret/)
+
+````
+
+![](docs/media/2022-01-23-22-17-46.png)
+
+![](docs/media/2022-01-23-22-16-55.png)
+
+Trigger the DealingWithJson workflow through the portal and refer to the run history. You will observe the same results  
+
+![](docs/media/2022-01-23-22-22-22.png)
 
 
 ## Scenario Solution proposal
