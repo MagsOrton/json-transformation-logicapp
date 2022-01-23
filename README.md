@@ -464,11 +464,11 @@ Let's read StoreA parameter values in the Compose action
 
 ![](docs/media/2022-01-12-16-38-44.png)
 
-and validate the value in the run history after triggering the URL in the  test.http file
+and inspect the value in the run history after triggering the URL in the "test.http" file
 
 ![](docs/media/2022-01-12-16-39-42.png)
 
-now let's select just a single parameter in a new compose action again and validate the value in the run history after triggering the URL in the  test.http file
+now let's select just a single parameter in a new compose action again and validate the value in the run history after triggering the URL in the "test.http" file
 
 ![](docs/media/2022-01-12-16-44-58.png)
 
@@ -504,9 +504,9 @@ You probably noticed that some workflow parameter values contain sensitive infor
 
 ````
 
-Working on workflows locally, you can move these values into the local.settings.json file. This file is usually excluded from the source code check-ins because it is included into the [.gitignore](.gitignore) file. Additionally you will need to refer to these values in the parameters.json file
+Working on workflows locally, you can move these values into the "local.settings.json" file. This file is usually excluded from the source code check-ins because it is included into the [".gitignore"](.gitignore) file. Additionally you will need to refer to these values in the "parameters.json" file
 
-Let's add these parameters to the local.settings.json
+Let's add these parameters to the "local.settings.json"
 
 Now it will look like that 
 ````
@@ -534,11 +534,13 @@ Now it will look like that
 ````
 All other values above our custom values were created automatically by Visual Studio Code.
 
+### Add values references to "parameters.json" file
+
 Let's add references to these values into our "parameters.json" file
 
 ````
 {
-  "mboParams": {
+  "MBOParams": {
     "type": "Object",
     "value": {
       "StoreA": {
@@ -564,10 +566,30 @@ Let's add references to these values into our "parameters.json" file
 }
 
 ````
+Repeat your previous test and ensure you receive the same result
+
+![](docs/media/2022-01-12-16-39-42.png)
 
 We are using the ["appsetting"](https://docs.microsoft.com/en-us/azure/logic-apps/parameterize-workflow-app?tabs=azure-portal#visual-studio-code) expression type to refer to the app settings in the local.setting.json during the local development, and to the Logic Apps "App Settings" for these values after the [Azure deployment](https://docs.microsoft.com/EN-US/azure/logic-apps/edit-app-settings-host-settings?tabs=azure-portal#manage-app-settings---localsettingsjson) 
 
-Repeat your previous test and you see that you receive the same result.
+### Optional - advanced secret protection with App Settings and KeyVault
+
+As [this document](https://docs.microsoft.com/en-us/azure/app-service/overview-security#application-secrets) states : "App Settings and connection strings are stored encrypted in Azure, and they're decrypted only before being injected into your app's process memory when the app starts. The encryption keys are rotated regularly. 
+Alternatively, you can integrate your App Service app with Azure Key Vault for advanced secrets management. By accessing the Key Vault with a managed identity, your App Service app can securely access the secrets you need."
+
+[This document](https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references) shows in great details how to refer to the KeyVault secrets from the App Settings. Your KeyVault needs to trust to the identity your Logic App having sufficient policies to access the secrets.
+
+Let me demo how to establish this trust and how to refer to the secrets from the app settings. For that I will deploy the demo logic app into my Azure Subscription.
+
+---
+**NOTE**
+If you want to go through the steps below, you will need to have an Azure Subsription with the KeyVault and single-tenant Logic App resources.
+You can deploy your Logic App to Azure directly from the Visual Studio Code command palette.
+
+---
+
+Here the resources for the newly created Logic App (Application Insights creating was skipped, but you will definitely need it for the production deployments)
+
 
 
 
@@ -595,7 +617,6 @@ json-transformation-logicapp/solution/logic
 
 Since we gave each action a custom name and the symbols are looking similar, go to the "About" section of the actions to see the type of action. Here is an example:
 ![](docs/media/2022-01-15-11-28-47.png)    
-
 
 
 ---
