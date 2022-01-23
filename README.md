@@ -490,6 +490,85 @@ parameters('MBOParams')?['StoreA']?.serviceEndpoint
 ````
 
 ---
+## Dealing with secrets
+
+### Move paramater values into the "local.settings.json" file
+
+You probably noticed that some workflow parameter values contain sensitive information which might be stored in your source code repository together with "parameters.json" file.
+
+````
+        "serviceEndpoint": "https://order-engine.storeb.com",
+        "OAuthTenantName": "storeb.com",
+        "OAuthAppId": "61612ba2-5672-4aa2-bfec-18886177871e",
+        "OAuthAppSecret": "coreAPIB-BigSecret",
+
+````
+
+Working on workflows locally, you can move these values into the local.settings.json file. This file is usually excluded from the source code check-ins because it is included into the [.gitignore](.gitignore) file. Additionally you will need to refer to these values in the parameters.json file
+
+Let's add these parameters to the local.settings.json
+
+Now it will look like that 
+````
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "WORKFLOWS_SUBSCRIPTION_ID": "",
+    "WORKFLOWS_TENANT_ID": "",
+    "WORKFLOWS_RESOURCE_GROUP_NAME": "",
+    "WORKFLOWS_LOCATION_NAME": "",
+    "WORKFLOWS_MANAGEMENT_BASE_URI": "https://management.azure.com/",
+    "StoreA.serviceEndpoint": "https://order-engine.storea.com",
+    "StoreA.OAuthTenantName": "storea.com",
+    "StoreA.OAuthAppId": "2de6a36b-89f0-4ef3-a8ce-191402ed2a1a",
+    "StoreA.OAuthAppSecret": "coreAPIA-BigSecret",
+    "StoreB.serviceEndpoint": "https://order-engine.storeb.com",
+    "StoreB.OAuthTenantName": "storeb.com",
+    "StoreB.OAuthAppId": "61612ba2-5672-4aa2-bfec-18886177871e",
+    "StoreB.OAuthAppSecret": "coreAPIB-BigSecret"
+  }
+}
+
+````
+All other values above our custom values were created automatically by Visual Studio Code.
+
+Let's add references to these values into our "parameters.json" file
+
+````
+{
+  "mboParams": {
+    "type": "Object",
+    "value": {
+      "StoreA": {
+        "serviceEndpoint": "@appsetting('StoreA.serviceEndpoint')",
+        "OAuthTenantName": "@appsetting('StoreA.OAuthTenantName')",
+        "OAuthAppId": "@appsetting('StoreA.OAuthAppId')",
+        "OAuthAppSecret": "@appsetting('StoreA.OAuthAppSecret')",
+        "retryAttempts": 3,
+        "retryInterval": 5,
+        "logLevel": "info"
+      },
+      "StoreB": {
+        "serviceEndpoint": "@appsetting('StoreB.serviceEndpoint')",
+        "OAuthTenantName": "@appsetting('StoreB.OAuthTenantName')",
+        "OAuthAppId": "@appsetting('StoreB.OAuthAppId')",
+        "OAuthAppSecret": "@appsetting('StoreB.OAuthAppSecret')",
+        "retryAttempts": 5,
+        "retryInterval": 2,
+        "logLevel": "error"
+      }
+    }
+  }
+}
+
+````
+
+We are using the ["appsetting"](https://docs.microsoft.com/en-us/azure/logic-apps/parameterize-workflow-app?tabs=azure-portal#visual-studio-code) expression type to refer to the app settings in the local.setting.json during the local development, and to the Logic Apps "App Settings" for these values after the [Azure deployment](https://docs.microsoft.com/EN-US/azure/logic-apps/edit-app-settings-host-settings?tabs=azure-portal#manage-app-settings---localsettingsjson) 
+
+Repeat your previous test and you see that you receive the same result.
+
 
 
 ## Scenario Solution proposal
@@ -524,6 +603,7 @@ Since we gave each action a custom name and the symbols are looking similar, go 
 The real solution does not return the result as an HTTP response, but rather sends it to the MBO service
 
 ---
+
 
 ## CI/CD
 
