@@ -464,11 +464,11 @@ Let's read StoreA parameter values in the Compose action
 
 ![](docs/media/2022-01-12-16-38-44.png)
 
-and validate the value in the run history after triggering the URL in the  test.http file
+and inspect the value in the run history after triggering the URL in the "test.http" file
 
 ![](docs/media/2022-01-12-16-39-42.png)
 
-now let's select just a single parameter in a new compose action again and validate the value in the run history after triggering the URL in the  test.http file
+now let's select just a single parameter in a new compose action again and validate the value in the run history after triggering the URL in the "test.http" file
 
 ![](docs/media/2022-01-12-16-44-58.png)
 
@@ -490,6 +490,158 @@ parameters('MBOParams')?['StoreA']?.serviceEndpoint
 ````
 
 ---
+## Dealing with secrets
+
+### Move paramater values into the "local.settings.json" file
+
+You probably noticed that some workflow parameter values contain sensitive information which might be stored in your source code repository together with "parameters.json" file.
+
+````
+        "serviceEndpoint": "https://order-engine.storeb.com",
+        "OAuthTenantName": "storeb.com",
+        "OAuthAppId": "61612ba2-5672-4aa2-bfec-18886177871e",
+        "OAuthAppSecret": "coreAPIB-BigSecret",
+
+````
+
+Working on workflows locally, you can move these values into the "local.settings.json" file. This file is usually excluded from the source code check-ins because it is included into the [".gitignore"](.gitignore) file. Additionally you will need to refer to these values in the "parameters.json" file
+
+Let's add these parameters to the "local.settings.json"
+
+Now it will look like that 
+````
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "WORKFLOWS_SUBSCRIPTION_ID": "",
+    "WORKFLOWS_TENANT_ID": "",
+    "WORKFLOWS_RESOURCE_GROUP_NAME": "",
+    "WORKFLOWS_LOCATION_NAME": "",
+    "WORKFLOWS_MANAGEMENT_BASE_URI": "https://management.azure.com/",
+    "StoreA.serviceEndpoint": "https://order-engine.storea.com",
+    "StoreA.OAuthTenantName": "storea.com",
+    "StoreA.OAuthAppId": "2de6a36b-89f0-4ef3-a8ce-191402ed2a1a",
+    "StoreA.OAuthAppSecret": "coreAPIA-BigSecret",
+    "StoreB.serviceEndpoint": "https://order-engine.storeb.com",
+    "StoreB.OAuthTenantName": "storeb.com",
+    "StoreB.OAuthAppId": "61612ba2-5672-4aa2-bfec-18886177871e",
+    "StoreB.OAuthAppSecret": "coreAPIB-BigSecret"
+  }
+}
+
+````
+All other values above our custom values were created automatically by Visual Studio Code.
+
+### Add values references to "parameters.json" file
+
+Let's add references to these values into our "parameters.json" file
+
+````
+{
+  "MBOParams": {
+    "type": "Object",
+    "value": {
+      "StoreA": {
+        "serviceEndpoint": "@appsetting('StoreA.serviceEndpoint')",
+        "OAuthTenantName": "@appsetting('StoreA.OAuthTenantName')",
+        "OAuthAppId": "@appsetting('StoreA.OAuthAppId')",
+        "OAuthAppSecret": "@appsetting('StoreA.OAuthAppSecret')",
+        "retryAttempts": 3,
+        "retryInterval": 5,
+        "logLevel": "info"
+      },
+      "StoreB": {
+        "serviceEndpoint": "@appsetting('StoreB.serviceEndpoint')",
+        "OAuthTenantName": "@appsetting('StoreB.OAuthTenantName')",
+        "OAuthAppId": "@appsetting('StoreB.OAuthAppId')",
+        "OAuthAppSecret": "@appsetting('StoreB.OAuthAppSecret')",
+        "retryAttempts": 5,
+        "retryInterval": 2,
+        "logLevel": "error"
+      }
+    }
+  }
+}
+
+````
+Repeat your previous test and ensure you receive the same result
+
+![](docs/media/2022-01-12-16-39-42.png)
+
+We are using the ["appsetting"](https://docs.microsoft.com/en-us/azure/logic-apps/parameterize-workflow-app?tabs=azure-portal#visual-studio-code) expression type to refer to the app settings in the local.setting.json during the local development, and to the Logic Apps "App Settings" for these values after the [Azure deployment](https://docs.microsoft.com/EN-US/azure/logic-apps/edit-app-settings-host-settings?tabs=azure-portal#manage-app-settings---localsettingsjson) 
+
+### Optional - advanced secret protection with App Settings and KeyVault
+
+As [this document](https://docs.microsoft.com/en-us/azure/app-service/overview-security#application-secrets) states : "App Settings and connection strings are stored encrypted in Azure, and they're decrypted only before being injected into your app's process memory when the app starts. The encryption keys are rotated regularly. 
+Alternatively, you can integrate your App Service app with Azure Key Vault for advanced secrets management. By accessing the Key Vault with a managed identity, your App Service app can securely access the secrets you need."
+
+[This document](https://docs.microsoft.com/en-us/azure/app-service/app-service-key-vault-references) shows in great details how to refer to the KeyVault secrets from the App Settings. Your KeyVault needs to trust to the identity your Logic App having sufficient policies to access the secrets.
+
+Let me demo how to establish this trust and how to refer to the secrets from the app settings. For that I will deploy the demo logic app into my Azure Subscription.
+
+---
+**NOTE**
+If you want to go through the steps below, you will need to have an Azure Subsription with the KeyVault and single-tenant Logic App resources.
+You can deploy your Logic App to Azure directly from the Visual Studio Code command palette.
+
+---
+
+Here are the resources for the newly created Logic App (Application Insights creation was skipped, but you will definitely need it for the production deployments)
+
+![](docs/media/2022-01-23-21-26-14.png)
+
+[Create a KeyVault resource](https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal#sign-in-to-azure) in this resource group
+
+Your resource group will contain the newly created KeyVault 
+
+![](docs/media/2022-01-23-21-31-20.png)
+
+Create a new Access Policy so that your Logic App is able to read secrets
+
+![](docs/media/2022-01-23-21-33-15.png)
+
+![](docs/media/2022-01-23-21-35-01.png)
+
+search for your Logic App managed identity by name 
+
+![](docs/media/2022-01-23-21-37-00.png)
+
+Click "next" and finish creating the access policy 
+
+![](docs/media/2022-01-23-21-39-35.png)
+
+Select the configuration of your Logic App and add the App Settings
+
+![](docs/media/2022-01-23-21-45-09.png)
+
+and save them
+
+Create corresponding secrets in the KeyVault
+
+![](docs/media/2022-01-23-21-49-46.png)
+
+![](docs/media/2022-01-23-21-52-06.png)
+
+![](docs/media/2022-01-23-21-59-50.png)
+
+Refer KeyVault values in your App Settings 
+
+Use the following syntax to refer to the secrets
+
+````
+@Microsoft.KeyVault(SecretUri=https://warm-up-la.vault.azure.net/secrets/StoreA-OAuthAppSecret/)
+
+````
+
+![](docs/media/2022-01-23-22-17-46.png)
+
+![](docs/media/2022-01-23-22-16-55.png)
+
+Trigger the DealingWithJson workflow through the portal and refer to the run history. You will observe the same results  
+
+![](docs/media/2022-01-23-22-22-22.png)
 
 
 ## Scenario Solution proposal
@@ -518,12 +670,12 @@ Since we gave each action a custom name and the symbols are looking similar, go 
 ![](docs/media/2022-01-15-11-28-47.png)    
 
 
-
 ---
 **NOTE**
 The real solution does not return the result as an HTTP response, but rather sends it to the MBO service
 
 ---
+
 
 ## CI/CD
 
